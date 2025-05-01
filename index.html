@@ -1,0 +1,199 @@
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pedidos</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+    {
+      "imports": {
+        "lucide": "https://unpkg.com/lucide@latest/dist/umd/lucide.js"
+      }
+    }
+    </script>
+</head>
+<body>
+    <div id="auth-container">
+        <div id="login-form" class="form-container active">
+            <h2>Login</h2>
+            <form id="login">
+                <div class="input-group">
+                    <label for="login-username">Usuário:</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Senha:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit">Entrar</button>
+                <p>Não tem conta? <a href="#" id="show-signup">Cadastre-se</a></p>
+            </form>
+        </div>
+
+        <div id="signup-form" class="form-container">
+            <h2>Cadastro</h2>
+            <form id="signup">
+                 <div class="input-group">
+                    <label for="signup-name">Nome:</label>
+                    <input type="text" id="signup-name" required>
+                </div>
+                <div class="input-group">
+                    <label for="signup-username">Usuário:</label>
+                    <input type="text" id="signup-username" required>
+                </div>
+                <div class="input-group">
+                    <label for="signup-password">Senha:</label>
+                    <input type="password" id="signup-password" required>
+                </div>
+                 <div class="input-group">
+                    <label for="signup-confirm-password">Confirmar Senha:</label>
+                    <input type="password" id="signup-confirm-password" required>
+                </div>
+                <button type="submit">Cadastrar</button>
+                <p>Já tem conta? <a href="#" id="show-login">Faça login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-container" style="display: none;">
+        <button id="menu-toggle" aria-label="Toggle Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+        <nav id="sidebar">
+            <ul>
+                <li><a href="#" class="nav-link" data-page="inicio"><i data-lucide="home"></i> <span>Início</span></a></li>
+                <li><a href="#" class="nav-link active" data-page="pedidos"><i data-lucide="clipboard-list"></i> <span>Pedidos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="cadastros"><i data-lucide="database"></i> <span>Cadastros</span></a></li>
+                <li><a href="#" class="nav-link" data-page="perfil"><i data-lucide="user"></i> <span>Meu Perfil</span></a></li>
+                <li><a href="#" class="nav-link" data-page="config"><i data-lucide="settings"></i> <span>Configuração</span></a></li>
+                <li><a href="#" id="logout-button"><i data-lucide="log-out"></i> <span>Sair</span></a></li>
+            </ul>
+        </nav>
+        <main id="main-content">
+            <div class="content-page" id="page-inicio" style="display: none;">
+                <h1>Início</h1>
+                <p>Bem-vindo ao Sistema de Pedidos!</p>
+            </div>
+            <div class="content-page active" id="page-pedidos">
+                <h1>Pedidos</h1>
+                <div class="toolbar">
+                    <div class="search-filter">
+                        <div class="search-box">
+                             <i data-lucide="search" class="search-icon"></i>
+                            <input type="text" id="search-input" placeholder="Pesquisar pedido...">
+                        </div>
+                        <button id="filter-button" class="icon-button" aria-label="Filtrar">
+                            <i data-lucide="filter"></i> Filtrar
+                        </button>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="add-button" class="icon-button primary" aria-label="Inserir Pedido">
+                            <i data-lucide="plus-circle"></i> Inserir
+                        </button>
+                        <button id="edit-button" class="icon-button" aria-label="Editar Pedido">
+                            <i data-lucide="pencil"></i> Editar
+                        </button>
+                        <button id="delete-button" class="icon-button danger" aria-label="Excluir Pedido">
+                            <i data-lucide="trash-2"></i> Excluir
+                        </button>
+                    </div>
+                </div>
+                <div class="order-list">
+                    <!-- Lista de pedidos será carregada aqui -->
+                    <p>Nenhum pedido encontrado.</p>
+                </div>
+            </div>
+             <div class="content-page" id="page-cadastros" style="display: none;">
+                <h1>Cadastros</h1>
+                <p>Gerencie seus cadastros (Clientes, Produtos, etc).</p>
+
+                <div class="cadastro-section">
+                    <h2>Cadastro de Clientes</h2>
+                    <form id="customer-form">
+                        <div class="input-group">
+                            <label for="customer-type">Tipo de Pessoa:</label>
+                            <select id="customer-type" required>
+                                <option value="" disabled selected>Selecione...</option>
+                                <option value="fisica">Pessoa Física</option>
+                                <option value="juridica">Pessoa Jurídica</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group" id="cpf-cnpj-group">
+                            <label for="customer-cpf-cnpj" id="label-cpf-cnpj">CPF/CNPJ:</label>
+                            <input type="text" id="customer-cpf-cnpj" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="customer-name">Nome / Razão Social:</label>
+                            <input type="text" id="customer-name" required>
+                        </div>
+
+                        <div class="input-group" id="nome-fantasia-group" style="display: none;">
+                            <label for="customer-fantasy-name">Nome Fantasia:</label>
+                            <input type="text" id="customer-fantasy-name">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="customer-address">Endereço Completo:</label>
+                            <textarea id="customer-address" rows="3"></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="customer-phone">Telefone:</label>
+                            <input type="tel" id="customer-phone">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="customer-contact">Nome de Contato:</label>
+                            <input type="text" id="customer-contact">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="customer-email">Email:</label>
+                            <input type="email" id="customer-email">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Situação Atual:</label>
+                            <div class="radio-group">
+                                <input type="radio" id="status-ativo" name="customer-status" value="ativo" checked>
+                                <label for="status-ativo">Ativo</label>
+                                <input type="radio" id="status-inativo" name="customer-status" value="inativo">
+                                <label for="status-inativo">Inativo</label>
+                            </div>
+                        </div>
+
+                        <div class="info-dates">
+                             <p>Data Cadastro: <span id="customer-reg-date">-</span></p>
+                             <p>Última Alteração: <span id="customer-mod-date">-</span></p>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="icon-button primary">
+                                <i data-lucide="save"></i> Salvar
+                            </button>
+                            <button type="button" id="cancel-customer-button" class="icon-button">
+                                <i data-lucide="x-circle"></i> Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                 <!-- Future sections for Produtos, etc. can go here -->
+            </div>
+             <div class="content-page" id="page-perfil" style="display: none;">
+                <h1>Meu Perfil</h1>
+                <p>Edite suas informações de perfil.</p>
+                 <!-- Conteúdo específico de Perfil -->
+            </div>
+             <div class="content-page" id="page-config" style="display: none;">
+                <h1>Configuração</h1>
+                <p>Ajuste as configurações do sistema.</p>
+                 <!-- Conteúdo específico de Configuração -->
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
